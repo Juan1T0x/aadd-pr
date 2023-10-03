@@ -1,0 +1,23 @@
+{
+	"acta": {
+		"@convocatoria": "febrero",
+		"@curso": "2023",
+		"@asignatura": "1092",
+		"calificacion": [
+			{
+				"nif": "23322156M",
+				"nota": "10"
+			},
+			{
+				"nif": "13322156M",
+				"nombre": "Pepe",
+				"nota": "8"
+			}
+		],
+		"diligencia": {
+			"@fecha": "2023-09-12",
+			"nif": "13322156M",
+			"nota": "9"
+		}
+	}
+}
