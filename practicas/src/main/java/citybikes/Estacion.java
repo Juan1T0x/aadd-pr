@@ -3,6 +3,7 @@ package citybikes;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Estacion {
     private String nombre;
@@ -12,13 +13,19 @@ public class Estacion {
     private String coordenadasGeograficas;  // Podrías usar una clase separada para esto, pero lo dejaremos como String para simplicidad.
     private String informacionTuristica;
     private List<Bici> bicis;
+	private String id;
     private static List<Estacion> todasLasEstaciones = new ArrayList<>();
-    
+    private List<String> sitiosTuristicos = new ArrayList<>();
     
   
 //Constructor de Estacion
-	public Estacion(String nombre) {
+    public Estacion(String nombre, int numeroDePuestos, String direccion, String coordenadasGeograficas) {
+        this.id = UUID.randomUUID().toString();  // generamos un ID único
+        this.fechaAlta = new Date(System.currentTimeMillis());  // establecemos la fecha actual
         this.nombre = nombre;
+        this.numeroDePuestos = numeroDePuestos;
+        this.direccion = direccion;
+        this.coordenadasGeograficas = coordenadasGeograficas;
         this.bicis = new ArrayList<>();
     }
     
@@ -103,6 +110,27 @@ public class Estacion {
 			Estacion.todasLasEstaciones = todasLasEstaciones;
 		}
 
+		public List<String> getSitiosTuristicos() {
+		    return sitiosTuristicos;
+		}
+
+		public void setSitiosTuristicos(List<String> sitiosTuristicos) {
+		    this.sitiosTuristicos = sitiosTuristicos;
+		}
+
+		public String getId() {
+		    return id;
+		}
+
+
+
+		@Override
+		public String toString() {
+			return "Estacion [nombre=" + nombre + ", fechaAlta=" + fechaAlta + ", numeroDePuestos=" + numeroDePuestos
+					+ ", direccion=" + direccion + ", coordenadasGeograficas=" + coordenadasGeograficas
+					+ ", informacionTuristica=" + informacionTuristica + ", bicis=" + bicis + ", id=" + id
+					+ ", sitiosTuristicos=" + sitiosTuristicos + "]";
+		}
 
 
 

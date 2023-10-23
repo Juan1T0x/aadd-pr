@@ -1,6 +1,8 @@
 package citybikes;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
 
 public class Administrador extends Usuario {
     
@@ -10,10 +12,11 @@ public class Administrador extends Usuario {
 		// TODO Auto-generated constructor stub
 	}
 
-    //Crear una nueva Estacion 
-    public Estacion crearEstacion(String nombre) {
-        Estacion nuevaEstacion = new Estacion(nombre);
-        Estacion.getTodasLasEstaciones().add(nuevaEstacion); // Agrega la nueva estación a la lista
+    //Alta de una estación de aparcamiento con la información
+    
+    public Estacion crearEstacion(String nombre, int numeroDePuestos, String direccion, String coordenadasGeograficas) {
+        Estacion nuevaEstacion = new Estacion(nombre, numeroDePuestos, direccion, coordenadasGeograficas);
+        Estacion.getTodasLasEstaciones().add(nuevaEstacion);
         return nuevaEstacion;
     }
     
@@ -54,6 +57,39 @@ public class Administrador extends Usuario {
     }
     
     
+         // Importante esta función.
+    public List<String> obtenerSitiosTuristicosProximos(String estacionId) {
+        // Esta función es un la base. 
+        // sitios turísticos próximos usando, API .
+        return Arrays.asList("Sitio Turístico 1", "Sitio Turístico 2", "Sitio Turístico 3");
+    }
+    
+    
+    //Establecer sitios turísticos. Esta operación recibe como parámetro el identificador y una colección de
+    //sitios turísticos que van a quedar asociados a la estación.
+
+    public void establecerSitiosTuristicos(String estacionId, List<String> sitios) {
+        for (Estacion estacion : Estacion.getTodasLasEstaciones()) {
+            if (estacion.getId().equals(estacionId)) {
+                estacion.setSitiosTuristicos(sitios);
+            }
+        }
+    }
+    
+    
+
+ // Obtener una estación 
+    public Estacion obtenerEstacion(String estacionId) {
+        for (Estacion estacion : Estacion.getTodasLasEstaciones()) {
+            if (estacion.getId().equals(estacionId)) {
+                return estacion;
+            }
+        }
+        return null;  // si no se encuentra la estación con el ID dado
+    }
+    
+    
     
     
 }
+
