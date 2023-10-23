@@ -47,6 +47,7 @@ public class Pruebas {
         // Mostrar incidencias pendientes
         System.out.println("Incidencias pendientes: " + Incidencia.getIncidenciasPendientes());
         
+        
         System.out.println("Pruebas de la segunda parte");
         System.out.println("");
         
@@ -60,7 +61,7 @@ public class Pruebas {
 
         // 2. Obtener sitios turísticos próximos (función placeholder)
         List<String> sitios = admin2.obtenerSitiosTuristicosProximos(estacionCreada.getId());
-        System.out.println("Sitios turísticos próximos (placeholder): " + sitios);
+        System.out.println("Sitios turísticos próximos: " + sitios);
 
         // 3. Establecer sitios turísticos para una estación y comprobar que se han establecido correctamente
         admin2.establecerSitiosTuristicos(estacionCreada.getId(), sitios);
