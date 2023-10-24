@@ -1,5 +1,6 @@
 package citybikes;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,7 +76,31 @@ public class Pruebas {
         } else {
             System.out.println("No se encontró la estación con el ID especificado.");
         }
-    }
+    
             
+    
+   
+    
+        System.out.println("---------------------------");
+        System.out.println("---------------------------");
         
+        System.out.println("Pruebas de la tercera parte");
+        
+        String coordenadasCatedralMurcia = "41.4036, 2.1744";
+        
+        SitiosTuristicosService servicio = new SitiosTuristicosService();
+        List<SitioTuristico> sitiosCercanos = servicio.obtenerSitiosDeInteres(coordenadasCatedralMurcia);
+        SitioTuristico sitioCercano = null;
+        if (!sitiosCercanos.isEmpty()) {
+            sitioCercano = sitiosCercanos.get(0);
+        }
+
+        System.out.println(sitioCercano.getNombre());
+        System.out.println(sitioCercano.getResumen());
+   
+      
+  
     }
+    
+   }
+

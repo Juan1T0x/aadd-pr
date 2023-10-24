@@ -21,7 +21,7 @@ public class SitioTuristico {
         this.categorias = categorias;
         this.enlacesExternos = enlacesExternos;
         this.imagenWikimedia = imagenWikimedia;
-        this.urlWikipedia = urlWikipedia;
+   
     }
 
     public String getNombre() {
