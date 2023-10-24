@@ -10,6 +10,8 @@ public class Usuario {
     private String telefono;
     private String nombre;
     private String apellidos;
+    private String direccion;
+    private String coordenadas;
  
 
     //Constructor de Usuarios
@@ -22,7 +24,23 @@ public class Usuario {
        
     }
     
-    //Función alquilar Bici
+    public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getCoordenadas() {
+		return coordenadas;
+	}
+
+	public void setCoordenadas(String coordenadas) {
+		this.coordenadas = coordenadas;
+	}
+
+	//Función alquilar Bici
     public void alquilarBici(Bici bici) {
         if (!bici.isAlquilada) {
             bici.alquilar();
@@ -37,6 +55,10 @@ public class Usuario {
         Incidencia incidencia = new Incidencia(descripcion, bicicletaAfectada);
         return incidencia;
     }
+    
+    //Ver puntos de prestamo 
+    //TODO
+    
 
 	public String getEmail() {
 		return email;
@@ -76,6 +98,12 @@ public class Usuario {
 
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [email=" + email + ", fechaDeNacimiento=" + fechaDeNacimiento + ", telefono=" + telefono
+				+ ", nombre=" + nombre + ", apellidos=" + apellidos + "]";
 	}
     
     

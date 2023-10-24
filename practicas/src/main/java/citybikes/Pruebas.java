@@ -13,7 +13,7 @@ public class Pruebas {
 
     	// ...
 
-    	Usuario operario = new Usuario("operario@example.com", new java.sql.Date(new Date().getTime()), "555444333", "Operario", "Uno");
+    	Administrador operario = new Administrador("operario@example.com", new java.sql.Date(new Date().getTime()), "555444333", "Operario", "Uno");
         //Crear una bici
         Bici bici = new Bici("Bici 01");
         
@@ -40,6 +40,7 @@ public class Pruebas {
         
         // Usuario crea una incidencia
         Incidencia incidencia1 = new Incidencia("Bici con freno defectuoso", bici);
+        Incidencia incidencia2 = new Incidencia("Bici con freno defectuoso", bici);
         
         // Administrador asigna la incidencia a un operario
        

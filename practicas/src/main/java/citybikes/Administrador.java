@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Administrador extends Usuario {
+	
+	
+	private List<Incidencia> incidenciasAsignadas;
     
 	//Constructor de Administrador.
     public Administrador(String email, Date fechaDeNacimiento, String telefono, String nombre, String apellidos) {
@@ -16,7 +19,7 @@ public class Administrador extends Usuario {
     
     public Estacion crearEstacion(String nombre, int numeroDePuestos, String direccion, String coordenadasGeograficas) {
         Estacion nuevaEstacion = new Estacion(nombre, numeroDePuestos, direccion, coordenadasGeograficas);
-        Estacion.getTodasLasEstaciones().add(nuevaEstacion);
+        Estacion.addEstacionToTodas(nuevaEstacion);
         return nuevaEstacion;
     }
     
@@ -30,8 +33,8 @@ public class Administrador extends Usuario {
         System.out.println("Bicicleta con código " + bici.getCodigo() + " dada de alta en estación " + estacion.getNombre());
     }
 
-    public void darBajaBici(Bici bici, String motivo) {
-        // Función para dar de baja a una bici
+ // Función para dar de baja a una bici
+    public void darBajaBici(Bici bici, String motivo) {  
         Estacion estacion = bici.getEstacion();
         if(estacion != null) {
             estacion.removerBici(bici);
@@ -44,8 +47,10 @@ public class Administrador extends Usuario {
     }
     
     
+    
  // Método para asignar una incidencia a un operario
-    public void asignarIncidenciaAOperario(Incidencia incidencia, Usuario operario) {
+    public void asignarIncidenciaAOperario(Incidencia incidencia, Administrador operario) {
+
         if (Incidencia.getIncidenciasPendientes().contains(incidencia)) {
             incidencia.setOperarioAsignado(operario);
             incidencia.setEstado(Estado.ASIGNADO); // Asumiendo que tienes un estado "ASIGNADA" en tu Enum

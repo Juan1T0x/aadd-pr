@@ -8,14 +8,12 @@ public class Incidencia {
     private Date fechaCreacion;
     private String descripcion;
     private Estado estado;  // podría ser un Enum si se quiere limitar a estados específicos
-    private Usuario operarioAsignado;
+    private Administrador operarioAsignado;
     private Bici bicicletaAfectada;
 
     // Lista estática que almacena todas las incidencias pendientes
     private static List<Incidencia> incidenciasPendientes = new ArrayList<>();
     
-    
-
     
     
     // Constructor de Incidencia
@@ -28,9 +26,6 @@ public class Incidencia {
         incidenciasPendientes.add(this);
     }
 
-    
-    
-    
     
     // Método para obtener todas las incidencias pendientes
     public static List<Incidencia> getIncidenciasPendientes() {
@@ -63,7 +58,7 @@ public class Incidencia {
         return operarioAsignado;
     }
 
-    public void setOperarioAsignado(Usuario operarioAsignado) {
+    public void setOperarioAsignado(Administrador operarioAsignado) {
         this.operarioAsignado = operarioAsignado;
     }
 

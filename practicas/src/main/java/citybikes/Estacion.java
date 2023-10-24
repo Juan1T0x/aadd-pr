@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Estacion {
+public class Estacion  {
     private String nombre;
     private Date fechaAlta;
     private int numeroDePuestos;
@@ -31,11 +31,46 @@ public class Estacion {
     
    
     
-    public static List<Estacion> getTodasLasEstaciones() {
+    public static void addEstacionToTodas(Estacion estacion) {
+    	todasLasEstaciones.add(estacion);
+    }
+    
+
+    public List<String> getSitiosTuristicos(String id){
+    	Estacion estacion = null;
+    	for(Estacion e: todasLasEstaciones) {
+    		if( e.getId().equals(id)) {
+    			estacion.clone(e);
+    		}
+    
+     }
+    	List<String> sitios = new ArrayList<String>();
+		return sitios;
+    }
+    
+    
+    
+    private void clone(Estacion e) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+
+	public static List<Estacion> getTodasLasEstaciones() {
         return todasLasEstaciones;
     }
 
     
+    public Estacion getEstacionFromId(String id) {
+    	for(Estacion e: todasLasEstaciones) {
+    		if( e.getId().equals(id)) {
+    			return e;
+    		}
+    	
+    	}return null;
+    }
+    
+
     public void agregarBici(Bici bici) {
         bicis.add(bici);
     }

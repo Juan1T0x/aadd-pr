@@ -10,6 +10,7 @@ public class Bici {
     private Date fechaAlta;
     private Date fechaBaja;
     private String motivoBaja;
+    private List<String> historicoUbicaciones = new ArrayList<>();
     boolean isAlquilada;
     private Estacion estacion;
     private List<Incidencia> incidencias = new ArrayList<>();
