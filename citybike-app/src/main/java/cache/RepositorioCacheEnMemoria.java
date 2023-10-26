@@ -19,10 +19,10 @@ public class RepositorioCacheEnMemoria implements RepositorioCache {
 	}
 
 	@Override
-	public SitioTuristicoCompleto findSitioTuristicoCompletoByURL(String url) {
+	public SitioTuristicoCompleto findSitioTuristicoCompletoByURL(String nombre) {
 		// Recorrer el JSON
 		for (SitioTuristicoCompleto sitioTuristicoCompleto : sitiosTuristicosCompletos) {
-			if (sitioTuristicoCompleto.getUrlWikipedia().equals(url)) {
+			if (sitioTuristicoCompleto.getNombre().equals(nombre)) {
 				return sitioTuristicoCompleto;
 			}
 		}

@@ -8,9 +8,9 @@ public class SitioTuristicoCompleto extends SitioTuristico{
 	private String resumen;
 	private List<String> categorias;
 	private List<String> enlacesComplementarios;
-	private Image imagen;
+	private String imagen;
 
-	public SitioTuristicoCompleto(String nombre, String descripcion, double distancia, String urlWikipedia, String resumen, List<String> categorias, List<String> enlacesComplementarios, Image imagen) {
+	public SitioTuristicoCompleto(String nombre, String descripcion, double distancia, String urlWikipedia, String resumen, List<String> categorias, List<String> enlacesComplementarios, String imagen) {
 		super(nombre, descripcion, distancia, urlWikipedia);
 		this.resumen = resumen;
 		this.categorias = categorias;
@@ -42,24 +42,21 @@ public class SitioTuristicoCompleto extends SitioTuristico{
 		this.enlacesComplementarios = enlacesComplementarios;
 	}
 
-	public Image getImagen() {
+	public String getImagen() {
 		return imagen;
 	}
 
-	public void setImagen(Image imagen) {
+	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
 
 	@Override
 	public String toString() {
 		 
-		return super.toString() + " \n SitioTuristicoCompleto [resumen=" + resumen + ", categorias=" + categorias + ", enlacesComplementarios="
+		return super.toString() + "\nSitioTuristicoCompleto [resumen=" + resumen + ", categorias=" + categorias + ", enlacesComplementarios="
 				+ enlacesComplementarios + ", imagen=" + imagen + "]";
 	}
 
-
-	
-		
 	}
 	
 
