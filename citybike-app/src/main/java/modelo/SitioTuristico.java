@@ -19,6 +19,8 @@ public class SitioTuristico {
 		this.urlWikipedia = urlWikipedia;
 	}
 	
+	
+	
 	// Getters y setters
 
 	public String getNombre() {

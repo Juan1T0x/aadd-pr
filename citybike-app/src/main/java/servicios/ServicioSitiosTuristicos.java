@@ -2,6 +2,9 @@ package servicios;
 
 import java.util.List;
 
+import external.ServicioDBpedia;
+import external.ServicioDBpediaImpl;
+import external.ServicioGeoNamesImpl;
 import modelo.SitioTuristico;
 import modelo.SitioTuristicoCompleto;
 import repositorios.RepositorioEstacion;
@@ -29,8 +32,9 @@ public class ServicioSitiosTuristicos implements IServicioSitiosTuristicos{
 
 	@Override
 	public List<SitioTuristico> obtenerSitiosTuristicosInteres(double latitud, double longitud) {
-		// TODO Auto-generated method stub
-		return null;
+		ServicioGeoNamesImpl servicio = new ServicioGeoNamesImpl();
+		return servicio.obtenerSitioTuristicoInteres(latitud, latitud);
+		
 	}
 
 
