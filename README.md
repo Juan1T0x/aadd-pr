@@ -1,2 +1,4 @@
 # aadd-pr
-Repositorio personal de las prácticas de AADD
+Repositorio de las prácticas + la entrega del proyecto de AADD
+
+IMPORTANTE: el código de la entrega se encuentra en el directorio citybikes-app
