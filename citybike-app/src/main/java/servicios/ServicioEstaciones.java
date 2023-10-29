@@ -3,22 +3,26 @@ package servicios;
 import java.util.ArrayList;
 import java.util.List;
 
+import cache.RepositorioCacheImpl;
 import modelo.Estacion;
 import modelo.SitioTuristico;
-import repositorios.RepositorioEstacion;
-import repositorios.RepositorioSitioTuristico;
+import repositorios.RepositorioEstacionesEnMemoria;
 
 public class ServicioEstaciones implements IServicioEstaciones {
 
-	private RepositorioEstacion repositorioEstacion;
-	private RepositorioSitioTuristico repositorioSitioTuristico;
+	private static RepositorioEstacionesEnMemoria repositorioEstacion = RepositorioEstacionesEnMemoria.getInstance();
+	private static ServicioSitiosTuristicos servicioSitiosTuristicos = ServicioSitiosTuristicos.getInstance();
 
-	public ServicioEstaciones(RepositorioEstacion repositorioEstacion,
-			RepositorioSitioTuristico repositorioSitioTuristico) {
-		this.repositorioEstacion = repositorioEstacion;
-		this.repositorioSitioTuristico = repositorioSitioTuristico;
+	// Singleton
+	private static ServicioEstaciones instance = new ServicioEstaciones();
+	
+	private ServicioEstaciones() {
+		
 	}
-
+	
+	public static ServicioEstaciones getInstance() {
+		return instance;
+	}
 	@Override
 	public String altaEstacion(String nombre, int numeroPuestos, String direccion, double latitud, double longitud) {
 		String idEstacion = generateUniqueId();
@@ -33,15 +37,16 @@ public class ServicioEstaciones implements IServicioEstaciones {
 		if (estacion == null) {
 			return new ArrayList<>();
 		}
-		// TODO: Implementar la logica para obtener los sitios turisticos proximos
-		
-		return new ArrayList<>();
+		double latitud = estacion.getLatidud();
+		double longitud = estacion.getLongitud();
+
+		return servicioSitiosTuristicos.obtenerSitiosTuristicosInteres(latitud, longitud);
 	}
 
 	@Override
 	public void establecerSitiosTuristicos(String idEstacion, List<SitioTuristico> sitiosTuristicos) {
 		Estacion estacion = repositorioEstacion.findEstacionById(idEstacion);
-		if(estacion != null) {
+		if (estacion != null) {
 			estacion.setSitiosTuristicosEstablecidos(sitiosTuristicos);
 		}
 	}

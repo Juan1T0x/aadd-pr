@@ -19,7 +19,11 @@ public class SitioTuristico {
 		this.urlWikipedia = urlWikipedia;
 	}
 	
+	// Constructor sin argumentos para JSON-B
 	
+	public SitioTuristico() {
+		
+	}
 	
 	// Getters y setters
 

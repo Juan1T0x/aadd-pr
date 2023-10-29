@@ -8,6 +8,17 @@ import modelo.Usuario;
 public class RepositorioUsuariosEnMemoria implements RepositorioUsuario {
 	
 	private List<Usuario> usuarios = new ArrayList<>();
+	
+	//TODO: Singleton
+	private static RepositorioUsuariosEnMemoria instance = new RepositorioUsuariosEnMemoria();
+	
+	private RepositorioUsuariosEnMemoria() {
+		
+	}
+	
+	public static RepositorioUsuariosEnMemoria getInstance() {
+		return instance;
+	}
 
 	@Override
 	public Usuario saveUsuario(Usuario usuario) {

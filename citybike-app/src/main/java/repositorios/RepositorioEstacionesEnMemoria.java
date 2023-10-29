@@ -7,7 +7,18 @@ import modelo.Estacion;
 
 public class RepositorioEstacionesEnMemoria implements RepositorioEstacion{
 	
-	List<Estacion> estaciones = new ArrayList<>();
+	private List<Estacion> estaciones = new ArrayList<>();
+	
+	//TODO: Singleton
+	private static RepositorioEstacionesEnMemoria instance = new RepositorioEstacionesEnMemoria();
+	
+	private RepositorioEstacionesEnMemoria() {
+		
+	}
+	
+	public static RepositorioEstacionesEnMemoria getInstance() {
+		return instance;
+	}
 	
 	@Override
 	public Estacion saveEstacion(Estacion estacion) {

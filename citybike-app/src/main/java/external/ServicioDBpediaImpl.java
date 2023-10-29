@@ -1,7 +1,5 @@
 package external;
 
-import java.awt.Image;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -10,138 +8,163 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import cache.RepositorioCache;
+import cache.RepositorioCacheImpl;
 import modelo.SitioTuristicoCompleto;
 
 public class ServicioDBpediaImpl implements ServicioDBpedia {
 
-	private RepositorioCache repositorioCache;
+	// Instanciamos el repositorio cache
+	private RepositorioCacheImpl repositorioCache = RepositorioCacheImpl.getInstance();
 
-	public SitioTuristicoCompleto obtenerInformacionSitioTuristico(String nombreInicio) {
+	private static ServicioDBpediaImpl instance = new ServicioDBpediaImpl();
 
-		String nombre;
-		repositorioCache = null;
+	private ServicioDBpediaImpl() {
 
-		if (nombreInicio.startsWith("https://")) {
-			nombre = extractPageTitle(nombreInicio);
+	}
+
+	public static ServicioDBpediaImpl getInstance() {
+		return instance;
+	}
+
+	public SitioTuristicoCompleto obtenerInformacionSitioTuristico(String idInicio) {
+
+		String id;
+
+		// Si el nombre que recibimos es una URL de wikipedia, procesamos el enlace para
+		// obtener el nombre del sitio
+		if (idInicio.startsWith("https://")) {
+			id = extractPageTitle(idInicio);
+			// Si recibimos un nombre bien formateado, empezamos a preparar la conexion
 		} else {
-			nombre = nombreInicio;
+			id = idInicio;
 		}
-		
-		System.out.println(nombre);
-		
+
+		// Debug
+		// System.out.println(nombre);
+
+		// Declaramos una instancia del objeto sitioTuristico sin inicializar
 		SitioTuristicoCompleto sitioTuristico;
-		
+
 		// Primero comprobar que se encuentra en cache
-		/*
-		if(repositorioCache.findSitioTuristicoCompletoByURL(nombre)!=null) {
-			sitioTuristico = repositorioCache.findSitioTuristicoCompletoByURL(nombre);
+		sitioTuristico = repositorioCache.findSitioTuristicoCompletoById(id);
+		if (sitioTuristico.getId() != null) {
+			// Debug
+			System.out.println(id + " se encontraba en cache y no se ha realizado una peticion a la API");
 			return sitioTuristico;
-		}
-		*/
-		
-		// Si no se encuentra en cache
+		} else {
+			try {
 
-		try {
-			String dbpediaURLstr = "https://es.dbpedia.org/data/" + URLEncoder.encode(nombre, "UTF-8") + ".json";
-			URL dbPediaURL = new URL(dbpediaURLstr);
-			HttpURLConnection connection = (HttpURLConnection) dbPediaURL.openConnection();
-			connection.setRequestMethod("GET");
+				// Creamos el URL del sitio al que queremos acceder
+				String dbpediaURLstr = "https://es.dbpedia.org/data/" + URLEncoder.encode(id, "UTF-8") + ".json";
 
-			int responseCode = connection.getResponseCode();
+				// Creamos las conexion a esta URL
+				URL dbPediaURL = new URL(dbpediaURLstr);
+				HttpURLConnection connection = (HttpURLConnection) dbPediaURL.openConnection();
+				connection.setRequestMethod("GET");
 
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				sitioTuristico = new SitioTuristicoCompleto(nombre, " ", 0, nombreInicio,
-						"", null, null, null);
-				InputStream inputStream = connection.getInputStream();
-				InputStreamReader reader = new InputStreamReader(inputStream);
+				int responseCode = connection.getResponseCode();
 
-				// Deserializar el JSON
-				JsonReader jsonReader = Json.createReader(reader);
-				JsonObject jsonObject = jsonReader.readObject();
+				// Si la conexion es correcta
+				if (responseCode == HttpURLConnection.HTTP_OK) {
 
-				String baseUrl = "http://es.dbpedia.org/resource/" + nombre; 
-
-				if (jsonObject.containsKey(baseUrl)) {
+					// Inicializamos el objeto
+					sitioTuristico = new SitioTuristicoCompleto(id, " ", 0, idInicio, "", null, null, null, null);
+					sitioTuristico.setId(id);
 					
-					JsonObject resourceObject = jsonObject.getJsonObject(baseUrl);
-					
-					// Obtener el nombre
-					if (resourceObject.containsKey("http://www.w3.org/2000/01/rdf-schema#label")) {
-						JsonArray nombreSitio = resourceObject.getJsonArray("http://www.w3.org/2000/01/rdf-schema#label");
-						for(int i = 0; i<nombreSitio.size(); i++) {
-							JsonObject nombreSitioObject = nombreSitio.getJsonObject(i);
-							if (nombreSitioObject.getString("lang", "").equals("es")) {
-								String nombreSitioText = nombreSitioObject.getString("value");
-								sitioTuristico.setNombre(nombreSitioText); //
-								break;
-							}	
-						}
-					}
+					InputStream inputStream = connection.getInputStream();
+					InputStreamReader reader = new InputStreamReader(inputStream);
 
-					// Obtener el resumen (abstract)
-					if (resourceObject.containsKey("http://dbpedia.org/ontology/abstract")) {
-						JsonArray abstracts = resourceObject.getJsonArray("http://dbpedia.org/ontology/abstract");
-						for (int i = 0; i < abstracts.size(); i++) {
-							JsonObject abstractObject = abstracts.getJsonObject(i);
-							if (abstractObject.getString("lang", "").equals("es")) {
-								String abstractText = abstractObject.getString("value");
-								sitioTuristico.setResumen(abstractText); //
-								break;
+					// Deserializar el JSON
+					JsonReader jsonReader = Json.createReader(reader);
+					JsonObject jsonObject = jsonReader.readObject();
+
+					String baseUrl = "http://es.dbpedia.org/resource/" + id;
+
+					if (jsonObject.containsKey(baseUrl)) {
+
+						JsonObject resourceObject = jsonObject.getJsonObject(baseUrl);
+
+						// Obtener el nombre
+						if (resourceObject.containsKey("http://www.w3.org/2000/01/rdf-schema#label")) {
+							JsonArray nombreSitio = resourceObject
+									.getJsonArray("http://www.w3.org/2000/01/rdf-schema#label");
+							for (int i = 0; i < nombreSitio.size(); i++) {
+								JsonObject nombreSitioObject = nombreSitio.getJsonObject(i);
+								if (nombreSitioObject.getString("lang", "").equals("es")) {
+									String nombreSitioText = nombreSitioObject.getString("value");
+									sitioTuristico.setNombre(nombreSitioText); //
+									break;
+								}
 							}
 						}
-					}
-					// Obtener Imagen
-					if (resourceObject.containsKey("http://es.dbpedia.org/property/imagen")) {
-						String imageUrl = resourceObject.getJsonArray("http://es.dbpedia.org/property/imagen")
-								.getJsonObject(0).getString("value");
-						sitioTuristico.setImagen(imageUrl);
-					}
 
-					// Obtener categorias
-					if (resourceObject.containsKey("http://purl.org/dc/terms/subject")) {
-						JsonArray categoriesArray = resourceObject.getJsonArray("http://purl.org/dc/terms/subject");
-						List<String> categories = new ArrayList<>();
-						for (int i = 0; i < categoriesArray.size(); i++) {
-							String categoryUrl = categoriesArray.getJsonObject(i).getString("value");
-							String categoryName = categoryUrl.substring(categoryUrl.lastIndexOf('/') + 1);
-							categories.add(categoryName);
+						// Obtener el resumen (abstract)
+						if (resourceObject.containsKey("http://dbpedia.org/ontology/abstract")) {
+							JsonArray abstracts = resourceObject.getJsonArray("http://dbpedia.org/ontology/abstract");
+							for (int i = 0; i < abstracts.size(); i++) {
+								JsonObject abstractObject = abstracts.getJsonObject(i);
+								if (abstractObject.getString("lang", "").equals("es")) {
+									String abstractText = abstractObject.getString("value");
+									sitioTuristico.setResumen(abstractText); //
+									break;
+								}
+							}
 						}
-						sitioTuristico.setCategorias(categories);
-					}
-					// Obtener Enlaces Externos
-					if (resourceObject.containsKey("http://dbpedia.org/ontology/wikiPageExternalLink")) {
-						List<String> externalLinks = new ArrayList<>();
-						JsonArray externalLinksArray = resourceObject
-								.getJsonArray("http://dbpedia.org/ontology/wikiPageExternalLink");
-						for (int i = 0; i < externalLinksArray.size(); i++) {
-							String link = externalLinksArray.getJsonObject(i).getString("value");
-							externalLinks.add(link);
+						// Obtener Imagen
+						if (resourceObject.containsKey("http://es.dbpedia.org/property/imagen")) {
+							String imageUrl = resourceObject.getJsonArray("http://es.dbpedia.org/property/imagen")
+									.getJsonObject(0).getString("value");
+							sitioTuristico.setImagen(imageUrl);
 						}
-						sitioTuristico.setEnlacesComplementarios(externalLinks);
+
+						// Obtener categorias
+						if (resourceObject.containsKey("http://purl.org/dc/terms/subject")) {
+							JsonArray categoriesArray = resourceObject.getJsonArray("http://purl.org/dc/terms/subject");
+							List<String> categories = new ArrayList<>();
+							for (int i = 0; i < categoriesArray.size(); i++) {
+								String categoryUrl = categoriesArray.getJsonObject(i).getString("value");
+								String categoryName = categoryUrl.substring(categoryUrl.lastIndexOf('/') + 1);
+								categories.add(categoryName);
+							}
+							sitioTuristico.setCategorias(categories);
+						}
+						// Obtener Enlaces Externos
+						if (resourceObject.containsKey("http://dbpedia.org/ontology/wikiPageExternalLink")) {
+							List<String> externalLinks = new ArrayList<>();
+							JsonArray externalLinksArray = resourceObject
+									.getJsonArray("http://dbpedia.org/ontology/wikiPageExternalLink");
+							for (int i = 0; i < externalLinksArray.size(); i++) {
+								String link = externalLinksArray.getJsonObject(i).getString("value");
+								externalLinks.add(link);
+							}
+							sitioTuristico.setEnlacesComplementarios(externalLinks);
+
+						}
 
 					}
 
+					// Guardamos el sitio turistico en la cache
+					System.out.println(
+							id + " no se encontraba en la cache y ha sido añadido tras realizar la peticion");
+					repositorioCache.saveSitioTuristicoCompleto(sitioTuristico);
+					return sitioTuristico;
+
+				} else {
+					System.out.println("Error al conectar a DBpedia. Código de respuesta: " + responseCode);
 				}
-				
-				// Guardamos el sitio turistico en la cache
-				
-				//repositorioCache.saveSitioTuristicoCompleto(sitioTuristico);
-				return sitioTuristico;
 
-			} else {
-				System.out.println("Error al conectar a DBpedia. Código de respuesta: " + responseCode);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+
+		// Si no se encuentra en cache
+
 		return null;
 	}
 
@@ -156,7 +179,8 @@ public class ServicioDBpediaImpl implements ServicioDBpedia {
 		ServicioDBpediaImpl servicio = new ServicioDBpediaImpl();
 		SitioTuristicoCompleto sitio = servicio
 				.obtenerInformacionSitioTuristico("https://es.wikipedia.org/wiki/Gran_Pirámide_de_Guiza");
-		System.out.println(sitio);
+		SitioTuristicoCompleto sitio2 = servicio
+				.obtenerInformacionSitioTuristico("https://es.wikipedia.org/wiki/Catedral_de_Murcia");
 	}
 
 }

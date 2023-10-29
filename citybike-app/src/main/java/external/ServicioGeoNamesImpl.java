@@ -16,6 +16,16 @@ import org.w3c.dom.NodeList;
 import modelo.SitioTuristico;
 
 public class ServicioGeoNamesImpl implements ServicioGeoNames {
+	
+	private static ServicioGeoNamesImpl instance = new ServicioGeoNamesImpl();
+	
+	private ServicioGeoNamesImpl() {
+		
+	}
+	
+	public static ServicioGeoNamesImpl getInstance() {
+		return instance;
+	}
 
 	@Override
 	public List<SitioTuristico> obtenerSitioTuristicoInteres(double latitud, double longitud) {
@@ -60,7 +70,7 @@ public class ServicioGeoNamesImpl implements ServicioGeoNames {
 					sitiosTuristicosInteres.add(sitioTuristico);
 				}
 			} else {
-				System.out.println("Erro al conectar a DBpedia. Código de respuesta: " + responseCode);
+				System.out.println("Error al conectar a DBpedia. Código de respuesta: " + responseCode);
 			}
 
 		} catch (Exception e) {

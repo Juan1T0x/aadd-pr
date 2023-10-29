@@ -8,6 +8,17 @@ import modelo.SitioTuristico;
 public class RepositorioSitiosTuristicosEnMemoria implements RepositorioSitioTuristico{
 	
 	private List<SitioTuristico> sitiosTuristicos = new ArrayList<>();
+	
+	//TODO: Singleton
+	private static RepositorioSitiosTuristicosEnMemoria instance =  new RepositorioSitiosTuristicosEnMemoria();
+	
+	private RepositorioSitiosTuristicosEnMemoria() {
+		
+	}
+	
+	public static RepositorioSitiosTuristicosEnMemoria getInstance() {
+		return instance;
+	}
 
 	@Override
 	public SitioTuristico saveSitioTuristico(SitioTuristico sitioTuristico) {

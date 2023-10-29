@@ -6,6 +6,6 @@ import modelo.SitioTuristicoCompleto;
 
 public interface RepositorioCache {
 	SitioTuristicoCompleto saveSitioTuristicoCompleto(SitioTuristicoCompleto sitioTuristicoCompleto);
-	SitioTuristicoCompleto findSitioTuristicoCompletoByURL(String url);
+	SitioTuristicoCompleto findSitioTuristicoCompletoById(String id);
 	List<SitioTuristicoCompleto> getAllSitiosTuristicosCompletos();
 }

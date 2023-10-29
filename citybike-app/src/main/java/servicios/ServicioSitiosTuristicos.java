@@ -2,47 +2,39 @@ package servicios;
 
 import java.util.List;
 
-import external.ServicioDBpedia;
 import external.ServicioDBpediaImpl;
 import external.ServicioGeoNamesImpl;
 import modelo.SitioTuristico;
 import modelo.SitioTuristicoCompleto;
-import repositorios.RepositorioEstacion;
-import repositorios.RepositorioSitioTuristico;
 
 public class ServicioSitiosTuristicos implements IServicioSitiosTuristicos{
 
-	private RepositorioEstacion repositorioEstacion;
-	private RepositorioSitioTuristico repositorioSitioTuristico;
-
-	public ServicioSitiosTuristicos(RepositorioEstacion repositorioEstacion,
-			RepositorioSitioTuristico repositorioSitioTuristico) {
-		this.repositorioEstacion = repositorioEstacion;
-		this.repositorioSitioTuristico = repositorioSitioTuristico;
+	private static ServicioDBpediaImpl servicioDBpedia = ServicioDBpediaImpl.getInstance();
+	private static ServicioGeoNamesImpl servicioGeoNames = ServicioGeoNamesImpl.getInstance();
+	
+	private static ServicioSitiosTuristicos instance = new ServicioSitiosTuristicos();
+	
+	private ServicioSitiosTuristicos() {
+		
 	}
-
-
-
-	@Override
-	public SitioTuristico obtenerSitioTuristico(String nombre) {
-		return repositorioSitioTuristico.findSitioTuristico(nombre);
+	
+	public static ServicioSitiosTuristicos getInstance() {
+		return instance;
 	}
-
-
-
+	
 	@Override
 	public List<SitioTuristico> obtenerSitiosTuristicosInteres(double latitud, double longitud) {
-		ServicioGeoNamesImpl servicio = new ServicioGeoNamesImpl();
-		return servicio.obtenerSitioTuristicoInteres(latitud, latitud);
+		List<SitioTuristico> sitiosTuristicos = servicioGeoNames.obtenerSitioTuristicoInteres(latitud, longitud);
+		return sitiosTuristicos;
 		
 	}
 
-
-
 	@Override
-	public List<SitioTuristicoCompleto> obtenerInformacionSitioTuristico(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+	public SitioTuristicoCompleto obtenerInformacionSitioTuristico(String id) {
+		SitioTuristicoCompleto sitioTuristico = servicioDBpedia.obtenerInformacionSitioTuristico(id);
+		return sitioTuristico;
 	}
+
+
 
 }
