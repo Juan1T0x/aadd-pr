@@ -92,6 +92,6 @@ public class MongoDBTest {
 
 
     private static void realizarOperacionesDePrueba(RepositorioEstacionMongoDB repositorioEstacion, RepositorioHistoricoEstacionamientoMongoDB repositorioHistorico) {
-        // Aquí puedes agregar código para probar operaciones específicas, como insertar, buscar, etc.
+   
     }
 }

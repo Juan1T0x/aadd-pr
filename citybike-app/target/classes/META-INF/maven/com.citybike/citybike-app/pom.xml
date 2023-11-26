@@ -24,15 +24,15 @@
 			<version>2.3.1</version>
 		</dependency>
 		<dependency>
+    <groupId>org.eclipse.persistence</groupId>
+    <artifactId>eclipselink</artifactId>
+    <version>TU_VERSION_COMPATIBLE</version>
+</dependency>
+		<dependency>
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-		 <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.2.6</version> <!-- Utiliza la última versión disponible -->
-    </dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -49,6 +49,16 @@
     	<artifactId>javax.persistence-api</artifactId>
     	<version>2.2</version>
 	</dependency>
+	    <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>eclipselink</artifactId>
+        <version>2.7.6</version>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.19</version>
+    </dependency> 
 	
 
 

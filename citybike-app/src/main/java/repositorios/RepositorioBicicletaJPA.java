@@ -16,7 +16,13 @@ public class RepositorioBicicletaJPA implements RepositorioBicicleta {
         entityManager.persist(bicicleta);
         return bicicleta;
     }
+    
+    @Override
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
+    
     @Override
     public Bicicleta findById(Long id) {
         return entityManager.find(Bicicleta.class, id);

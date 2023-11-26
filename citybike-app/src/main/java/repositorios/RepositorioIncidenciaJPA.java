@@ -22,6 +22,11 @@ public class RepositorioIncidenciaJPA implements RepositorioIncidencia {
     }
 
     @Override
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+    
+    @Override
     public Incidencia findById(Long id) {
         return entityManager.find(Incidencia.class, id);
     }

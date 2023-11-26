@@ -11,4 +11,5 @@ public interface RepositorioBicicleta {
     List<Bicicleta> findAll();
     void delete(Bicicleta bicicleta);
 	Bicicleta findById(Long id);
+    void setEntityManager(EntityManager entityManager);
 }
