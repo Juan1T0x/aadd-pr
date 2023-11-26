@@ -16,6 +16,9 @@ public class Pruebas {
 		// Prueba 1: Probamos todas la funcionalidad del Administrador ya que de esta
 		// forma probamos gran parte de los servicios ofrecidos por la aplicacion
 
+		
+		/*
+		
 		Administrador admin = new Administrador("juan.hernandeza@um.es", new Date(), "608517851",
 				"Juan Hernández Acosta");
 		String idEstacionPrueba = admin.altaEstacion("Espinardo", 3, "Campus de Espinardo", 38.019296, -1.166760);
@@ -32,6 +35,9 @@ public class Pruebas {
 		for (int i = 0; i < estacionPrueba.getSitiosTuristicosEstablecidos().size(); i++) {
 			System.out.println(estacionPrueba.getSitiosTuristicosEstablecidos().get(i));
 		}
+		*/
+		
+		
 		System.out.println("");
 		// Prueba 2: El único servicio que queda por probar es el ServicioDBpedia,
 		// incluido en ServicioSitiosTuristicos

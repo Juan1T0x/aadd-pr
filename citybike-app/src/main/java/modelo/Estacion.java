@@ -2,137 +2,141 @@ package modelo;
 
 import java.util.Date;
 import java.util.List;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class Estacion {
+    private ObjectId id;
+    private String nombre;
+    private double latitud;
+    private double longitud;
+    private int numeroPuestos;
+    private String direccion;
+    private Date fechaAlta;
+    private String informacion;
+    private List<Bicicleta> bicicletas;
+    private List<SitioTuristico> sitiosTuristicosEstablecidos;
 
-	// Propiedades
+    // Constructores
+    public Estacion() {
+    }
 
-	private String id;
-	private String nombre;
-	private Date fechaAlta;
-	private int numeroPuestos;
-	private String direccion;
-	private double latidud, longitud;
-	private String informacion;
+    public Estacion(String nombre, double latitud, double longitud, int numeroPuestos, String direccion, String informacion) {
+        this.nombre = nombre;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.numeroPuestos = numeroPuestos;
+        this.direccion = direccion;
+        this.fechaAlta = new Date();
+        this.informacion = informacion;
+    }
 
-	private List<SitioTuristico> sitiosTuristicosEstablecidos;
+    // Getters y setters
+    public ObjectId getId() {
+        return id;
+    }
 
-	// Constructor
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
-	public Estacion(String id, String nombre, Date fechaAlta, int numeroPuestos, String direccion, double latidud,
-			double longitud, String informacion, List<SitioTuristico> sitiosTuristicosEstablecidos) {
-		this.id = id;
-		this.nombre = nombre;
-		this.fechaAlta = fechaAlta;
-		this.numeroPuestos = numeroPuestos;
-		this.direccion = direccion;
-		this.latidud = latidud;
-		this.longitud = longitud;
-		this.informacion = informacion;
-		this.sitiosTuristicosEstablecidos = sitiosTuristicosEstablecidos;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public Estacion(String id, String nombre, int numeroPuestos, String direccion, double latitud, double longitud,
-			String informacion) {
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-		this(id, nombre, new Date(), numeroPuestos, direccion, latitud, longitud, informacion, null);
+    public double getLatitud() {
+        return latitud;
+    }
 
-	}
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
 
-	public Estacion(String id, String nombre, int numeroPuestos, String direccion, double latitud, double longitud) {
+    public double getLongitud() {
+        return longitud;
+    }
 
-		this(id, nombre, new Date(), numeroPuestos, direccion, latitud, longitud, null, null);
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
 
-	}
+    public int getNumeroPuestos() {
+        return numeroPuestos;
+    }
 
-	// Getters y setters
+    public void setNumeroPuestos(int numeroPuestos) {
+        this.numeroPuestos = numeroPuestos;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getDireccion() {
+        return direccion;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public Date getFechaAlta() {
+        return fechaAlta;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setFechaAlta(Date fechaAlta) {
+        this.fechaAlta = fechaAlta;
+    }
 
-	public Date getFechaAlta() {
-		return fechaAlta;
-	}
+    public String getInformacion() {
+        return informacion;
+    }
 
-	public void setFechaAlta(Date fechaAlta) {
-		this.fechaAlta = fechaAlta;
-	}
+    public void setInformacion(String informacion) {
+        this.informacion = informacion;
+    }
 
-	public int getnPuestos() {
-		return numeroPuestos;
-	}
+    public List<Bicicleta> getBicicletas() {
+        return bicicletas;
+    }
 
-	public void setnPuestos(int numeroPuestos) {
-		this.numeroPuestos = numeroPuestos;
-	}
+    public void setBicicletas(List<Bicicleta> bicicletas) {
+        this.bicicletas = bicicletas;
+    }
 
-	public String getDireccion() {
-		return direccion;
-	}
+    public List<SitioTuristico> getSitiosTuristicosEstablecidos() {
+        return sitiosTuristicosEstablecidos;
+    }
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
+    public void setSitiosTuristicosEstablecidos(List<SitioTuristico> sitiosTuristicosEstablecidos) {
+        this.sitiosTuristicosEstablecidos = sitiosTuristicosEstablecidos;
+    }
 
-	public double getLatidud() {
-		return latidud;
-	}
+    public static Document toDocument(Estacion estacion) {
+        Document doc = new Document();
+        doc.append("nombre", estacion.getNombre())
+           .append("ubicacion", new Document("type", "Point").append("coordinates", List.of(estacion.getLongitud(), estacion.getLatitud())))
+           .append("numeroPuestos", estacion.getNumeroPuestos())
+           .append("direccion", estacion.getDireccion())
+           .append("fechaAlta", estacion.getFechaAlta())
+           .append("informacion", estacion.getInformacion());
+        // Agregar otros campos necesarios
+        return doc;
+    }
 
-	public void setLatidud(double latidud) {
-		this.latidud = latidud;
-	}
-
-	public double getLongitud() {
-		return longitud;
-	}
-
-	public void setLongitud(double longitud) {
-		this.longitud = longitud;
-	}
-
-	public String getInformacion() {
-		return informacion;
-	}
-
-	public void setInformacion(String informacion) {
-		this.informacion = informacion;
-	}
-
-	public int getNumeroPuestos() {
-		return numeroPuestos;
-	}
-
-	public void setNumeroPuestos(int numeroPuestos) {
-		this.numeroPuestos = numeroPuestos;
-	}
-
-	public List<SitioTuristico> getSitiosTuristicosEstablecidos() {
-		return sitiosTuristicosEstablecidos;
-	}
-
-	public void setSitiosTuristicosEstablecidos(List<SitioTuristico> sitiosTuristicosEstablecidos) {
-		this.sitiosTuristicosEstablecidos = sitiosTuristicosEstablecidos;
-	}
-
-	@Override
-	public String toString() {
-		return "Estacion [id=" + id + ", nombre=" + nombre + ", fechaAlta=" + fechaAlta + ", numeroPuestos="
-				+ numeroPuestos + ", direccion=" + direccion + ", latidud=" + latidud + ", longitud=" + longitud
-				+ ", informacion=" + informacion + ", sitiosTuristicosEstablecidos=" + sitiosTuristicosEstablecidos
-				+ "]";
-	}	
-	
+    // Convertir de Document a Estacion
+    public static Estacion fromDocument(Document doc) {
+        Estacion estacion = new Estacion();
+        estacion.setId(doc.getObjectId("_id"));
+        estacion.setNombre(doc.getString("nombre"));
+        List<Double> coordinates = doc.get("ubicacion", Document.class).getList("coordinates", Double.class);
+        estacion.setLatitud(coordinates.get(1));
+        estacion.setLongitud(coordinates.get(0));
+        estacion.setNumeroPuestos(doc.getInteger("numeroPuestos"));
+        estacion.setDireccion(doc.getString("direccion"));
+        estacion.setFechaAlta(doc.getDate("fechaAlta"));
+        estacion.setInformacion(doc.getString("informacion"));
+        // Agregar otros campos necesarios
+        return estacion;
+    }
 }

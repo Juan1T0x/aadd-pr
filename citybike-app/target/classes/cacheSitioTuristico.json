@@ -1,0 +1,46 @@
+
+[
+    {
+        "descripcion": " ",
+        "distancia": 0.0,
+        "nombre": "Catedral de Murcia",
+        "url_wikipedia": "https://es.wikipedia.org/wiki/Catedral_de_Murcia",
+        "categorias": [
+            "Categoría:Catedral_de_Murcia"
+        ],
+        "enlaces_complementarios": [
+            "http://web.archive.org/web/http:/www.murciaturistica.es/PORTAL/ptm.estructura.web%3Fvurl=./ptm.recursos_turisticos.detallem%3Fidi=1$pnumexp=5$panoexp=2002$recurso=1$subrecurso=4$acc=S$seccion=10",
+            "https://web.archive.org/web/20080621061022/http:/www.museosdemurcia.com/catedral/",
+            "http://web.archive.org/web/http:/www.diocesisdecartagena.org/dio_cat_historia.php",
+            "http://www.regmurcia.com/servlet/s.Sl%3Fsit=c%2C522&r=ReP-28611-DETALLE_REPORTAJES",
+            "https://tools.wmflabs.org/panoviewer/%23Catedral_de_Murcia_-_Capilla_de_Los_V%C3%A9lez.jpg"
+        ],
+        "id": "Catedral_de_Murcia",
+        "imagen": "Kathedrale.Murcia.Spanien.JPG",
+        "resumen": "La Santa Iglesia Catedral de Santa María,​ conocida como Catedral de Murcia, es el templo principal y sede de la Diócesis de Cartagena. Se encuentra en pleno casco antiguo de la ciudad de Murcia, en la Plaza del Cardenal Belluga. Consagrada en 1467, sufrió varios añadidos (como la torre-campanario) o reformas ocasionales (nuevas capillas o fachadas) principalmente en los siglos XVI y XVIII, por lo que integra el estilo gótico original con añadidos renacentistas, barrocos y neoclásicos. Entre sus elementos arquitectónicos destacan la torre, de 93 metros de altura que la convierten en el tercer campanario más alto de España -el segundo si se incluyen solo catedrales-;​ la fachada principal o imafronte, considerada como una obra maestra del barroco español; y las capillas de los Vélez, de Junterones y del Trascoro. En la Capilla Mayor se halla la urna sepulcral donde reposan el corazón y las entrañas de Alfonso X el Sabio. La Catedral de Santa María fue declarada Monumento Nacional en 1931."
+    },
+    {
+        "descripcion": " ",
+        "distancia": 0.0,
+        "nombre": "Faro de Alejandría",
+        "url_wikipedia": "https://es.wikipedia.org/wiki/Faro_de_Alejandría",
+        "categorias": [
+            "Categoría:Alejandría",
+            "Categoría:Siete_Maravillas_del_Mundo",
+            "Categoría:Torres_desaparecidas",
+            "Categoría:Arquitectura_en_Egipto_del_siglo_III_a._C.",
+            "Categoría:Torres_de_Egipto",
+            "Categoría:Faros_de_Egipto",
+            "Categoría:Edificios_y_estructuras_terminadas_en_el_siglo_III_a._C."
+        ],
+        "enlaces_complementarios": [
+            "http://www.unesco.org/csi/pub/papers2/alex.pdf",
+            "https://web.archive.org/web/20070706045015/http:/ce.eng.usf.edu/pharos/wonders/index.html",
+            "https://web.archive.org/web/20100402145940/http:/prensa.legadoandalusi.es/prensa/articulos/reportajes/470-ibn-al-shayj-de-mga-deslumbrado-ante-el-faro-de-alejandr.html",
+            "https://cordis.europa.eu/article/id/86904-a-window-into-ancient-history/es"
+        ],
+        "id": "Faro_de_Alejandría",
+        "imagen": null,
+        "resumen": "El Faro de Alejandría fue una torre construida en el siglo III a. C. (entre los años 285 y 247 a. C.) en la isla de Faro en Alejandría, Egipto, para servir como punto de referencia del puerto y como faro, con una altura estimada de al menos 100 metros. Fue una de las estructuras hechas por el hombre más altas durante muchos siglos, y forma parte como una de las siete maravillas del mundo antiguo por Antípatro de Sidón. Se vio derribado por los efectos de un terremoto a principios del siglo XIV."
+    }
+]

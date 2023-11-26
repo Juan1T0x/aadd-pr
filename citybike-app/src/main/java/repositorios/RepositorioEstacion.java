@@ -1,11 +1,15 @@
 package repositorios;
 
+import modelo.Estacion;
 import java.util.List;
 
-import modelo.Estacion;
+import org.bson.types.ObjectId;
 
 public interface RepositorioEstacion {
-	Estacion saveEstacion(Estacion estacion);
-	Estacion findEstacionById(String id);
-	List<Estacion> getAllEstaciones();
+    Estacion save(Estacion estacion);
+    Estacion findById(ObjectId id);
+    List<Estacion> findAll();
+    void delete(Estacion estacion);
+    void createGeoIndex();
+    List<Estacion> findNearby(double latitud, double longitud, double maxDistance);
 }
