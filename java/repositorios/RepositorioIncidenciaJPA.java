@@ -4,6 +4,8 @@ import modelo.Incidencia;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 public class RepositorioIncidenciaJPA implements RepositorioIncidencia {
@@ -40,4 +42,16 @@ public class RepositorioIncidenciaJPA implements RepositorioIncidencia {
     public void delete(Incidencia incidencia) {
         entityManager.remove(incidencia);
     }
+    
+    @Override
+    public boolean tieneIncidenciasAbiertas(String codigoBicicleta) {
+    	
+    	//Recuperar incidencias abiertas podría ser una consulta JPQL.
+        String jpql = "SELECT COUNT(i) FROM Incidencia i WHERE i.bicicleta.codigo = :codigoBicicleta AND i.estado = 'abierta'";
+        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
+        query.setParameter("codigoBicicleta", codigoBicicleta);
+        long count = query.getSingleResult();
+        return count > 0;
+    }
+    
 }

@@ -20,7 +20,7 @@ public class JPATest {
         EntityManager em = emf.createEntityManager();
 
         // Crear instancias de repositorios
-        RepositorioBicicletaJPA repoBicicleta = new RepositorioBicicletaJPA();
+        RepositorioBicicletaJPA repoBicicleta = new RepositorioBicicletaJPA(em);
         RepositorioIncidenciaJPA repoIncidencia = new RepositorioIncidenciaJPA();
 
         // Inyectar EntityManager en repositorios

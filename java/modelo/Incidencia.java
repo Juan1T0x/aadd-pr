@@ -11,16 +11,21 @@ public class Incidencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Mejor etiquetar con @Lob los campos que pueden ser textos largos.
+    @Lob
     @Column(nullable = false)
     private String codigo;
 
+    @Lob
     @Column(nullable = false, length = 1000)
     private String descripcion;
 
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_creacion", nullable = false)
     private Date fechaCreacion;
 
+    @Lob
     @Column(nullable = false)
     private String estado;
     

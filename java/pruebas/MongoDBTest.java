@@ -2,6 +2,10 @@ package pruebas;
 
 import java.sql.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.bson.types.ObjectId;
 
 import com.mongodb.client.MongoClient;
@@ -16,10 +20,11 @@ import repositorios.RepositorioBicicletaJPA;
 import repositorios.RepositorioEstacionMongoDB;
 import repositorios.RepositorioHistoricoEstacionamientoMongoDB;
 import servicios.ServicioEstaciones;
+import servicios.ServicioException;
 
 public class MongoDBTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ServicioException {
         // Cadena de conexión a MongoDB
         String cadenaConexion = "mongodb+srv://joseangelgarciapagan8:0eMpNiLOb2Y55Eub@joseangelgp.byffz2l.mongodb.net/?retryWrites=true&w=majority";
 
@@ -65,8 +70,11 @@ public class MongoDBTest {
         System.out.println("Estación insertada: " + estacionInsertada.getNombre());
 
       
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tuUnidadDePersistencia");
+        EntityManager em = emf.createEntityManager();
+        
         //ServicioEstaciones servicioEstaciones = new ServicioEstaciones(repositorioBici, repositorioEstacion, repositorioHistorico);
-        RepositorioBicicleta repositorioBicicleta = new RepositorioBicicletaJPA(); // Reemplaza con la implementación real
+        RepositorioBicicleta repositorioBicicleta = new RepositorioBicicletaJPA(em); // Reemplaza con la implementación real
         
         ServicioEstaciones servicioEstaciones = new ServicioEstaciones(repositorioBicicleta, repositorioEstacion, repositorioHistorico);
         

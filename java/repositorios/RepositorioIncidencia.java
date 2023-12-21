@@ -11,4 +11,5 @@ public interface RepositorioIncidencia {
     List<Incidencia> findAll();
     void delete(Incidencia incidencia);
     void setEntityManager(EntityManager entityManager);
+	boolean tieneIncidenciasAbiertas(String codigoBicicleta);
 }

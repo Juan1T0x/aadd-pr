@@ -2,6 +2,11 @@ package modelo;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -14,10 +19,38 @@ public class Estacion {
     private String direccion;
     private Date fechaAlta;
     private String informacion;
-    private List<Bicicleta> bicicletas;
+
+   
+    
+   
+    
+    //Estacion tiene una colección de tipo Bicicleta, no es necesario duplicar de esa forma, debería ser una colección de ids de bicicleta,
+    //de todas formas, luego no la guardáis en MongoDb, con lo que os sirve de poco.
+    
+    private List<Long> bicicletaIds;
+   // Colección de IDs de bicicleta
     private List<SitioTuristico> sitiosTuristicosEstablecidos;
 
-    // Constructores
+
+
+    //No definís la asociación entre Bicicleta e Incidencia.
+//Para definir la asociación entre Bicicleta e Incidencia en tu modelo Java, debes establecer relaciones en ambas clases.
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bicicleta_id")
+    private Bicicleta bicicleta;
+
+    public Bicicleta getBicicleta() {
+        return bicicleta;
+    }
+
+    public void setBicicleta(Bicicleta bicicleta) {
+        this.bicicleta = bicicleta;
+    }
+    /////////////////////////////////////////////
+    
+    
+	// Constructores
     public Estacion() {
     }
 
@@ -96,13 +129,7 @@ public class Estacion {
         this.informacion = informacion;
     }
 
-    public List<Bicicleta> getBicicletas() {
-        return bicicletas;
-    }
-
-    public void setBicicletas(List<Bicicleta> bicicletas) {
-        this.bicicletas = bicicletas;
-    }
+ 
 
     public List<SitioTuristico> getSitiosTuristicosEstablecidos() {
         return sitiosTuristicosEstablecidos;
@@ -111,32 +138,41 @@ public class Estacion {
     public void setSitiosTuristicosEstablecidos(List<SitioTuristico> sitiosTuristicosEstablecidos) {
         this.sitiosTuristicosEstablecidos = sitiosTuristicosEstablecidos;
     }
+    public List<Long> getBicicletaIds() {
+		return bicicletaIds;
+	}
 
-    public static Document toDocument(Estacion estacion) {
-        Document doc = new Document();
-        doc.append("nombre", estacion.getNombre())
-           .append("ubicacion", new Document("type", "Point").append("coordinates", List.of(estacion.getLongitud(), estacion.getLatitud())))
-           .append("numeroPuestos", estacion.getNumeroPuestos())
-           .append("direccion", estacion.getDireccion())
-           .append("fechaAlta", estacion.getFechaAlta())
-           .append("informacion", estacion.getInformacion());
-        // Agregar otros campos necesarios
-        return doc;
-    }
+	public void setBicicletaIds(List<Long> bicicletaIds) {
+		this.bicicletaIds = bicicletaIds;
+	}
 
-    // Convertir de Document a Estacion
-    public static Estacion fromDocument(Document doc) {
-        Estacion estacion = new Estacion();
-        estacion.setId(doc.getObjectId("_id"));
-        estacion.setNombre(doc.getString("nombre"));
-        List<Double> coordinates = doc.get("ubicacion", Document.class).getList("coordinates", Double.class);
-        estacion.setLatitud(coordinates.get(1));
-        estacion.setLongitud(coordinates.get(0));
-        estacion.setNumeroPuestos(doc.getInteger("numeroPuestos"));
-        estacion.setDireccion(doc.getString("direccion"));
-        estacion.setFechaAlta(doc.getDate("fechaAlta"));
-        estacion.setInformacion(doc.getString("informacion"));
-        // Agregar otros campos necesarios
-        return estacion;
-    }
+
+	public static Document toDocument(Estacion estacion) {
+	    Document doc = new Document();
+	    doc.append("nombre", estacion.getNombre())
+	       .append("ubicacion", new Document("type", "Point").append("coordinates", List.of(estacion.getLongitud(), estacion.getLatitud())))
+	       .append("numeroPuestos", estacion.getNumeroPuestos())
+	       .append("direccion", estacion.getDireccion())
+	       .append("fechaAlta", estacion.getFechaAlta())
+	       .append("informacion", estacion.getInformacion())
+	       .append("bicicletaIds", estacion.getBicicletaIds()); // Agregar la lista de IDs de bicicletas
+	    // Agregar otros campos necesarios
+	    return doc;
+	}
+
+	public static Estacion fromDocument(Document doc) {
+	    Estacion estacion = new Estacion();
+	    estacion.setId(doc.getObjectId("_id"));
+	    estacion.setNombre(doc.getString("nombre"));
+	    List<Double> coordinates = doc.get("ubicacion", Document.class).getList("coordinates", Double.class);
+	    estacion.setLatitud(coordinates.get(1));
+	    estacion.setLongitud(coordinates.get(0));
+	    estacion.setNumeroPuestos(doc.getInteger("numeroPuestos"));
+	    estacion.setDireccion(doc.getString("direccion"));
+	    estacion.setFechaAlta(doc.getDate("fechaAlta"));
+	    estacion.setInformacion(doc.getString("informacion"));
+	    estacion.setBicicletaIds(doc.getList("bicicletaIds", Long.class)); // Recuperar la lista de IDs de bicicletas
+	    // Recuperar otros campos si es necesario
+	    return estacion;
+	}
 }

@@ -23,13 +23,30 @@ public class ServicioEstaciones {
     private RepositorioHistoricoEstacionamiento repositorioHistorico;
     private int radio;
 
-    public ServicioEstaciones(RepositorioBicicleta repositorioBicicleta, RepositorioEstacion repositorioEstacion, RepositorioHistoricoEstacionamiento repositorioHistorico) {
+    // Otros repositorios si son necesarios
+
+    public ServicioEstaciones(RepositorioBicicleta repositorioBicicleta, RepositorioEstacion repositorioEstacion, 
+                              RepositorioHistoricoEstacionamiento repositorioHistorico /*, otros repositorios */) {
         this.repositorioBicicleta = repositorioBicicleta;
         this.repositorioEstacion = repositorioEstacion;
         this.repositorioHistorico = repositorioHistorico;
+        // Inicializar otros repositorios
     }
 
-    public String altaBicicleta(String modelo, String estacionId) {
+    
+
+    
+    //Al crear/modificar las entidades estaría bien comprobar los campos para que no sean vacíos.
+    
+    public String altaBicicleta(String modelo, String estacionId) throws ServicioException {
+        // Validar campos
+        if (modelo == null || modelo.trim().isEmpty()) {
+            throw new ServicioException("El modelo no puede estar vacío.");
+        }
+        if (estacionId == null || estacionId.trim().isEmpty()) {
+            throw new ServicioException("El ID de la estación no puede estar vacío.");
+        }
+
         // Crear y guardar la nueva bicicleta
         Bicicleta nuevaBicicleta = new Bicicleta();
         nuevaBicicleta.setModelo(modelo);
@@ -39,37 +56,60 @@ public class ServicioEstaciones {
         // Convertir String a ObjectId
         ObjectId objectId = new ObjectId(estacionId);
 
-        // Buscar la estación y agregar la bicicleta a ella
+        // Buscar la estación y agregar el ID de la bicicleta a ella
         Estacion estacion = repositorioEstacion.findById(objectId);
         if (estacion != null) {
-            estacion.getBicicletas().add(bicicletaGuardada);
+            estacion.getBicicletaIds().add(bicicletaGuardada.getId()); // Suponiendo que getId() devuelve el ID de la bicicleta
             repositorioEstacion.save(estacion);
         }
 
         return bicicletaGuardada.getCodigo();
     }
-
     
-    public void estacionarBicicleta(String codigoBicicleta, String estacionId) {
-        Bicicleta bicicleta = repositorioBicicleta.findById(codigoBicicleta);
+    public void estacionarBicicleta(String codigoBicicleta, String estacionId) throws ServicioException {
+        // Validar campos
+        if (codigoBicicleta == null || codigoBicicleta.trim().isEmpty()) {
+            throw new ServicioException("El código de la bicicleta no puede estar vacío.");
+        }
+        if (estacionId == null || estacionId.trim().isEmpty()) {
+            throw new ServicioException("El ID de la estación no puede estar vacío.");
+        }
 
-        // Convertir String a ObjectId
         ObjectId objectId = new ObjectId(estacionId);
         Estacion estacion = repositorioEstacion.findById(objectId);
 
-        if (bicicleta != null && estacion != null) {
-            bicicleta.setEstacion(estacion);
-            repositorioBicicleta.save(bicicleta);
-
-            HistoricoEstacionamiento historico = new HistoricoEstacionamiento(bicicleta.getCodigo(), estacion.getId(), new Date());
-            repositorioHistorico.save(historico);
+        Bicicleta bicicleta = repositorioBicicleta.findById(codigoBicicleta);
+        if (bicicleta == null) {
+            throw new ServicioException("Bicicleta no encontrada.");
         }
+
+        // Comprobar si la bicicleta ya está estacionada
+        if (bicicleta.getEstacionId() != null) {
+            throw new ServicioException("La bicicleta ya está estacionada en una estación.");
+        }
+
+        // Comprobar si hay espacio en la estación
+        if (estacion.getBicicletaIds().size() >= estacion.getNumeroPuestos()) {
+            throw new ServicioException("No hay espacio disponible en la estación.");
+        }
+
+        // Estacionar la bicicleta
+        bicicleta.setEstacionId(estacion.getId()); // Aquí pasamos el ID de la estación, no el objeto Estacion
+        repositorioBicicleta.save(bicicleta);
+
+        // Agregar el ID de la bicicleta a la lista de IDs de bicicletas de la estación
+        estacion.getBicicletaIds().add(bicicleta.getId());
+        repositorioEstacion.save(estacion);
+
+        // Crear y guardar el histórico de estacionamiento
+        HistoricoEstacionamiento historico = new HistoricoEstacionamiento(bicicleta.getCodigo(), estacion.getId(), new Date());
+        repositorioHistorico.save(historico);
     }
-    
+
 
     public void retirarBicicleta(String codigoBicicleta) {
         Bicicleta bicicleta = repositorioBicicleta.findById(codigoBicicleta);
-        if (bicicleta != null && bicicleta.getEstacionActual() != null) {
+        if (bicicleta != null && bicicleta.getEstacionId() != null) {
             List<HistoricoEstacionamiento> historicos = repositorioHistorico.findAllByBicicletaCodigo(codigoBicicleta);
             HistoricoEstacionamiento ultimoHistorico = historicos.stream().filter(h -> h.getFechaFin() == null).findFirst().orElse(null);
 
@@ -78,50 +118,59 @@ public class ServicioEstaciones {
                 repositorioHistorico.save(ultimoHistorico);
             }
 
-            bicicleta.setEstacion(null);
+            bicicleta.setEstacionId(null);
             repositorioBicicleta.save(bicicleta);
         }
     }
 
+    //Al dar de baja una bicicleta hay que retirarla también.
+    //Correcion
+    
     public void darDeBajaBicicleta(String codigoBicicleta, String motivo) {
         Bicicleta bicicleta = repositorioBicicleta.findById(codigoBicicleta);
         if (bicicleta != null) {
+            // Retirar la bicicleta si está estacionada
+            if (bicicleta.getEstacionId() != null) {
+                retirarBicicleta(codigoBicicleta); // Este método ya maneja el retiro y la actualización del histórico
+            }
+
+            // Dar de baja la bicicleta
             bicicleta.setFechaBaja(new Date());
             bicicleta.setMotivoBaja(motivo);
             repositorioBicicleta.save(bicicleta);
         }
     }
-
-    public List<Bicicleta> bicicletasCercanas(double latitud, double longitud) {
+    public List<Bicicleta> bicicletasCercanas(double latitud, double longitud) throws ServicioException {
+        // Validar campos
+        if (latitud < -90 || latitud > 90 || longitud < -180 || longitud > 180) {
+            throw new ServicioException("Latitud o longitud fuera de rango.");
+        }
         
         List<Estacion> estacionesCercanas = repositorioEstacion.findNearby(latitud, longitud, radio);
 
         return estacionesCercanas.stream()
-                                 .flatMap(estacion -> estacion.getBicicletas().stream())
-                                 .filter(bicicleta -> bicicleta.getFechaBaja() == null) // Solo bicicletas disponibles
+                                 .flatMap(estacion -> estacion.getBicicletaIds().stream())
+                                 .map(bicicletaId -> repositorioBicicleta.findById(bicicletaId))
+                                 .filter(bicicleta -> bicicleta != null && bicicleta.getFechaBaja() == null)
                                  .collect(Collectors.toList());
     }
 
 
+    
+    //La función que devuelve las estaciones ordenadas por sitios turísticos se refiere  a los sitios turísticos ya asignados a la estación
+    //(que por cierto no guardáis en mongodb), por lo que no hay que volver a llamar a geonames.
 
     public List<Estacion> estacionesConMasSitiosTuristicos() {
+        // Obtener todas las estaciones
         List<Estacion> todasEstaciones = repositorioEstacion.findAll();
-        
-        todasEstaciones.forEach(estacion -> {
-            double latitud = estacion.getLatitud();
-            double longitud = estacion.getLongitud();
-            
-            // Obtener sitios turísticos cercanos usando ServicioGeoNamesImpl
-            List<SitioTuristico> sitiosCercanos = ServicioGeoNamesImpl.getInstance()
-                                                                      .obtenerSitioTuristicoInteres(latitud, longitud);
 
-            estacion.setSitiosTuristicosEstablecidos(sitiosCercanos);
-        });
-
+        // Ordenar las estaciones por el número de sitios turísticos asignados
         return todasEstaciones.stream()
-                              .sorted((e1, e2) -> e2.getSitiosTuristicosEstablecidos().size() - e1.getSitiosTuristicosEstablecidos().size())
+                              .sorted((e1, e2) -> Integer.compare(
+                                  e2.getSitiosTuristicosEstablecidos().size(),
+                                  e1.getSitiosTuristicosEstablecidos().size())
+                              )
                               .collect(Collectors.toList());
     }
-
 
 }

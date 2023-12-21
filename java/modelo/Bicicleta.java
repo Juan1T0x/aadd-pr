@@ -1,7 +1,11 @@
 package modelo;
 
 import javax.persistence.*;
+
+import org.bson.types.ObjectId;
+
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "bicicletas")
@@ -11,12 +15,17 @@ public class Bicicleta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Mejor etiquetar con @Lob los campos que pueden ser textos largos.
+ 
+    @Lob
     @Column(nullable = false)
     private String codigo;
-
+    
+    @Lob
     @Column(nullable = false)
     private String modelo;
 
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_alta", nullable = false)
     private Date fechaAlta;
@@ -25,14 +34,46 @@ public class Bicicleta {
     @Column(name = "fecha_baja")
     private Date fechaBaja;
 
+    @Lob
     @Column(name = "motivo_baja")
     private String motivoBaja;
     
-    private Estacion estacion;
 
+    
+    
+    //La clase Bicicleta tiene un atributo de tipoEstacion, pero la estación con todos sus campos se guarda en mongodb, 
+    //por lo que el atributo estacion en Bicicleta debería guardar el id de la estación, 
+    //y tal como está definido, no se va a guardar bien en MySQL.
+	// Cambio del tipo de 'Estacion' a 'String' o 'Long'
+    @Column(name = "estacion_id")
+    private ObjectId estacionId;
+
+
+ 
+    
     // Constructores
     public Bicicleta() {
     }
+    
+    //No definís la asociación entre Bicicleta e Incidencia.
+//Para definir la asociación entre Bicicleta e Incidencia en tu modelo Java, debes establecer relaciones en ambas clases. 
+    
+    @OneToMany(mappedBy = "bicicleta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Incidencia> incidencias;
+    
+    public List<Incidencia> getIncidencias() {
+        return incidencias;
+    }
+    
+    public void setIncidencias(List<Incidencia> incidencias) {
+        this.incidencias = incidencias;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    
 
     public Bicicleta(String codigo, String modelo) {
         this.codigo = codigo;
@@ -88,14 +129,17 @@ public class Bicicleta {
     public void setMotivoBaja(String motivoBaja) {
         this.motivoBaja = motivoBaja;
     }
-    
-    public void setEstacion(Estacion estacion) {
-        this.estacion = estacion;
-    }
 
-	public Object getEstacionActual() {
-		return this.estacion;
+	public ObjectId getEstacionId() {
+		return estacionId;
 	}
+
+    
+	  public void setEstacionId(ObjectId estacionId) {
+	        this.estacionId = estacionId;
+	    }
+	    
+    
 }
 
         
